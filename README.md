@@ -35,3 +35,24 @@ green once you fix it.
 - Setup: `SETUP.md`
 
 See the Lab 2 handout on the course page for the three milestones you show a TA.
+
+## Milestone 3: auditing the generated suite
+
+Three weaknesses in `AvailabilityCalculatorTest`:
+
+1. **Every multi-booking test ends its last booking at 17:00** (*controllability*) — in five of
+   the six tests the latest booking ends at `DAY_END`, so there is no trailing gap to drop and
+   the buggy and fixed implementations return identical output.
+2. **`returnedSlotsNeverOverlapABooking` reaches the bug but cannot see it** (*observability*) —
+   it books only 10:00–11:00, so the buggy code silently loses 11:00–17:00, but the test asserts
+   only that the slots it got back do not overlap. Nothing checks what is missing.
+3. **No test passes an empty booking list** (*controllability*) — the input on which the bug is
+   worst, since the buggy code reports a completely free day as having no availability at all.
+
+High coverage did not save it because coverage measures which lines *ran*, not whether the
+assertions *checked* the result — and the bug was an omission, so there was no line for JaCoCo
+to mark red in the first place.
+
+## Tools used
+
+Claude Code, with Claude Opus 5.
