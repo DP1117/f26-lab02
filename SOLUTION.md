@@ -42,5 +42,3 @@ leaves no gap to emit. Three lines in `AvailabilityCalculator`; the property was
 touched. All 8 tests now pass, with the property clearing 1000 generated cases including
 the replayed counterexample, and the 9:00–17:00 day with a 10:00–11:00 meeting now returns
 both 9:00–10:00 and 11:00–17:00.
-
-**Milestone 3:** not started.

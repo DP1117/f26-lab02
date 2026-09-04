@@ -50,8 +50,7 @@ Three weaknesses in `AvailabilityCalculatorTest`:
    worst, since the buggy code reports a completely free day as having no availability at all.
 
 High coverage did not save it because coverage measures which lines *ran*, not whether the
-assertions *checked* the result — and the bug was an omission, so there was no line for JaCoCo
-to mark red in the first place.
+assertions *checked* the result — and the bug was an omission.
 
 ## Tools used
 
