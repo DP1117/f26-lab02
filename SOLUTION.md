@@ -10,16 +10,27 @@ disagree, which pins down both halves of the spec — never both, and never neit
 jqwik failed it on the first try with `Scenario[dayStart=0, dayEnd=1, bookings=[]]`: a
 one-minute day, nothing booked, and the calculator returns `[]`, so minute 0 is neither
 booked nor free. The provided property passes on that same input vacuously — `free` is
-empty, so its loop body never runs and not one assertion executes. The underlying bug
-is that `freeSlots` emits the gap *before* each booking but never the trailing gap from
-the cursor to `dayEnd`, so free time after the last booking is dropped; a normal
-9:00–17:00 day with a single 10:00–11:00 meeting returns only 9:00–10:00 and loses the
-whole afternoon. The failing run reported:
+empty, so its loop body never runs and not one assertion executes.
 
 ```
+                              |-----------------------jqwik-----------------------
+tries = 1                     | # of calls to property
+checks = 1                    | # of not rejected calls
+generation = RANDOMIZED       | parameters are randomly generated
+after-failure = SAMPLE_FIRST  | try previously failed sample, then previous seed
+when-fixed-seed = ALLOW       | fixing the random seed is allowed
+edge-cases#mode = MIXIN       | edge cases are mixed in
+edge-cases#total = 650        | # of all combined edge cases
+edge-cases#tried = 1          | # of edge cases tried in current run
+seed = -6576973228387177418   | random seed to reproduce generated values
+
+Sample
+------
+  arg0: Scenario[dayStart=0, dayEnd=1, bookings=[]]
+
+....
+
 minute 0 is NEITHER booked nor reported free; day = [0, 1), bookings = [], free = []
 ```
-
-with the six example tests and the provided property all still passing in that same run.
 
 **Milestones 2 and 3:** not started.
