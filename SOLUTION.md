@@ -33,4 +33,14 @@ Sample
 minute 0 is NEITHER booked nor reported free; day = [0, 1), bookings = [], free = []
 ```
 
-**Milestones 2 and 3:** not started.
+**Milestone 2.** The bug: `freeSlots` emitted the gap *before* each booking but never the
+trailing gap from the last booking to `dayEnd`, so free time after the final meeting was
+silently dropped — and with no bookings at all the cursor never moved and the whole day
+vanished. The fix adds that trailing gap after the loop, guarded by `cursor < dayEnd`
+because `TimeInterval` rejects empty intervals and a booking running to the end of the day
+leaves no gap to emit. Three lines in `AvailabilityCalculator`; the property was not
+touched. All 8 tests now pass, with the property clearing 1000 generated cases including
+the replayed counterexample, and the 9:00–17:00 day with a 10:00–11:00 meeting now returns
+both 9:00–10:00 and 11:00–17:00.
+
+**Milestone 3:** not started.
